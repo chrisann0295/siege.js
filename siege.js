@@ -142,6 +142,12 @@ siege.attack = function() {
   }
 
   queueSiege(this.options)
+  return this
+}
+
+siege.finally = function(callback) {
+  this.options.finally = callback
+  return this
 }
 
 function SiegeWrap(siege) {
@@ -252,10 +258,14 @@ function queueSiege(options) {
 
 function nextSiege() {
   var options = queue.shift()
-  if(!options) {
-    process.exit()
+  if (options) {
+    startSiege(options, function () {
+      if (typeof options.finally === 'function') {
+        options.finally();
+      }
+      nextSiege();
+    })
   }
-  startSiege(options, nextSiege)
 }
 
 function startSiege(options, callback) {
