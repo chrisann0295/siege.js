@@ -72,7 +72,6 @@ function gradeColor(value, worst, best) {
 }
 
 module.exports = function(options, callback) {
-
   var taskIndex = 0
     , globalJar
     ;
@@ -85,12 +84,16 @@ module.exports = function(options, callback) {
   }
 
   function nextTask() {
+  // console.log("Tasks are",options.tasks)
 
     var task = options.tasks[taskIndex ++]
-    if(!task) {
+    console.log("Task index is", taskIndex)
+    // if options.finally exists and task doenst exist, just skip, don't exit proccess
+    if(!options.finally && !task) {
       if(callback) callback()
       process.exit()
     }
+
 
     var enableCookie = task.enableCookie || (task.enableCookie === undefined && options.enableCookie)
     var jar = enableCookie && (globalJar || new CookieJar())

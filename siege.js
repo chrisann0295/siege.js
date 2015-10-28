@@ -261,6 +261,7 @@ function nextSiege() {
   if (options) {
     startSiege(options, function () {
       if (typeof options.finally === 'function') {
+        // started = false;
         options.finally();
       }
       nextSiege();
